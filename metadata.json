@@ -1,0 +1,6 @@
+{
+  "name": "LANDGUARD AI",
+  "description": "LANDGUARD AI — See Risk Early → Know Why → Act Before Slippage",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
