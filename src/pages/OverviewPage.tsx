@@ -1,30 +1,27 @@
 import React from 'react';
 import {
-  FolderKanban,
   MapPin,
   AlertOctagon,
   Clock,
-  TrendingUp,
-  ArrowUpRight,
   ChevronRight,
-  ShieldCheck,
-  AlertTriangle,
   ArrowRight,
-  ShieldAlert,
+  CheckCircle2,
+  TrendingUp,
 } from 'lucide-react';
 import { Project, LandParcel } from '../types';
-import { MOCK_EARLY_WARNINGS } from '../data/mockData';
 import { RiskBadge } from '../components/common/RiskBadge';
-import { StatusBadge } from '../components/common/StatusBadge';
 import { ProgressBar } from '../components/common/ProgressBar';
 import { CountUpNumber } from '../components/common/CountUpNumber';
 import { RiskDistributionChart } from '../components/charts/RiskDistributionChart';
-import { LineTrendChart } from '../components/charts/LineTrendChart';
 import { GISRiskHotspots } from '../components/gis/GISRiskHotspots';
+import { ScrollReveal } from '../components/common/ScrollReveal';
 
 interface OverviewPageProps {
   projects: Project[];
   parcels: LandParcel[];
+  selectedState?: string;
+  selectedDistrict?: string;
+  searchQuery?: string;
   onSelectProject: (projectId: string) => void;
   onSelectParcel: (parcelId: string) => void;
   onNavigateToProjects: () => void;
@@ -34,12 +31,15 @@ interface OverviewPageProps {
 export const OverviewPage: React.FC<OverviewPageProps> = ({
   projects,
   parcels,
+  selectedState = 'All States',
+  selectedDistrict = 'All Districts',
+  searchQuery = '',
   onSelectProject,
   onSelectParcel,
   onNavigateToProjects,
   onNavigateToParcels,
 }) => {
-  // Centralized Aggregate Metrics derived strictly from current dataset
+  // Aggregate Metrics derived strictly from dataset
   const totalActiveProjects = projects.length;
   const totalParcelsCount = parcels.length;
   const acquiredParcelsCount = parcels.filter(
@@ -65,244 +65,193 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
     .slice(0, 4);
 
   return (
-    <div id="screen-overview" className="p-5 space-y-5 max-w-7xl mx-auto font-sans">
-      {/* Welcome & Overview Header */}
-      <div className="bg-white border border-slate-200 rounded-xs px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xs bg-slate-900 text-blue-400 flex items-center justify-center font-mono text-sm font-bold border border-slate-700 flex-shrink-0">
-            LG
-          </div>
+    <div id="screen-overview" className="p-6 md:p-10 space-y-8 max-w-7xl mx-auto font-sans">
+      {/* 1. Header & Context */}
+      <ScrollReveal delayMs={0}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
           <div>
-            <h2 className="font-bold text-sm text-slate-900 tracking-tight">
-              Land Acquisition Early Warning System
-            </h2>
-            <p className="text-xs text-slate-500 font-normal mt-0.5">
-              Forecast delays, identify root causes, and take preventative action across active infrastructure corridors.
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-xl font-semibold text-white tracking-tight">
+                Land Acquisition Overview
+              </h1>
+              <span className="text-xs font-mono text-blue-400 bg-blue-950/60 border border-blue-800/80 px-2 py-0.5 rounded">
+                Active Monitoring
+              </span>
+            </div>
+            <p className="text-sm text-slate-400 mt-1">
+              Predictive risk detection, root-cause diagnostics, and statutory intervention tracking across infrastructure corridors.
             </p>
           </div>
-        </div>
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <span className="text-[11px] text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xs border border-emerald-300 font-medium flex items-center gap-1.5 font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
-            Live Corridor Monitoring
-          </span>
-        </div>
-      </div>
-
-      {/* Operational Workflow: INGEST -> PREDICT -> EXPLAIN -> ACT */}
-      <div
-        id="operational-workflow-strip"
-        className="bg-white rounded-xs border border-slate-200 p-3.5 shadow-2xs space-y-2.5"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-100 pb-2">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold text-blue-900 bg-blue-50 px-2 py-0.5 rounded-xs border border-blue-200">
-              HOW IT WORKS
-            </span>
-            <span className="text-xs font-semibold text-slate-700">
-              See Risk Early → Understand Why → Act Before Delays Occur
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <span className="text-xs text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded font-mono">
+              CALIBRATED REGISTRY • {totalParcelsCount.toLocaleString()} PARCELS
             </span>
           </div>
-          <span className="text-[10px] font-mono text-slate-400">
-            4-Step Intelligence Workflow
-          </span>
+        </div>
+      </ScrollReveal>
+
+      {/* 2. Executive KPI Summary — 3 High-Impact Cards with Clear Visual Hierarchy */}
+      <ScrollReveal delayMs={80}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Visual Anchor: High-Risk Exposure (Larger, High Contrast) */}
+        <div
+          id="kpi-high-risk-anchor"
+          className="lg:col-span-5 bg-slate-900/90 rounded-lg border border-slate-800 p-6 shadow-xl relative overflow-hidden flex flex-col justify-between"
+        >
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-slate-400">
+                Primary Risk Exposure
+              </span>
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-rose-400 bg-rose-950/60 border border-rose-800/70 px-2.5 py-0.5 rounded">
+                <AlertOctagon className="w-3.5 h-3.5" />
+                Immediate Action Required
+              </span>
+            </div>
+            <div className="pt-2 flex items-baseline gap-3">
+              <span className="text-4xl font-bold font-mono text-white tabular-nums tracking-tight">
+                <CountUpNumber value={highRiskParcelsCount} durationMs={250} />
+              </span>
+              <span className="text-sm font-sans text-slate-400">
+                high-risk parcels ({highRiskPct}% of total)
+              </span>
+            </div>
+          </div>
+
+          <div className="pt-5 border-t border-slate-800/80 mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <span className="text-xs text-slate-400 block">Average Delay Variance</span>
+              <span className="text-lg font-bold font-mono text-rose-400 mt-0.5 block tabular-nums">
+                +{avgPredictedDelay} days
+              </span>
+              <span className="text-[11px] text-slate-500">Beyond planned statutory SLA</span>
+            </div>
+            <div>
+              <span className="text-xs text-slate-400 block">Pending Acquisition</span>
+              <span className="text-lg font-bold font-mono text-white mt-0.5 block tabular-nums">
+                {pendingParcelsCount} parcels
+              </span>
+              <span className="text-[11px] text-slate-500">Awaiting award or possession</span>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs relative">
-          {/* 01. INGEST */}
-          <div className="p-3 bg-slate-50 rounded-xs border border-slate-200 relative group hover:border-slate-300 transition-colors">
-            <div className="flex items-center justify-between text-slate-500 mb-1 font-mono">
-              <span className="text-[10px] font-bold uppercase text-slate-700">1. INGEST</span>
-              <span className="text-[9px] text-blue-700 bg-blue-50 px-1.5 py-0.2 rounded-xs border border-blue-200 font-semibold">DATA</span>
+        {/* Card 2: Overall Acquisition Clearance */}
+        <div
+          id="kpi-clearance-progress"
+          className="lg:col-span-4 bg-slate-900/70 rounded-lg border border-slate-800 p-6 shadow-lg flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between text-slate-400 mb-1">
+              <span className="text-xs font-medium text-slate-400">
+                Acquisition Clearance Progress
+              </span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             </div>
-            <span className="font-bold text-slate-900 block text-xs font-sans">Acquisition Records</span>
-            <p className="text-[11px] text-slate-500 font-sans mt-0.5 leading-snug">
-              Connects revenue surveys, notifications, and ownership records.
+            <div className="pt-2 flex items-baseline gap-3">
+              <span className="text-3xl font-bold font-mono text-white tabular-nums">
+                <CountUpNumber value={clearancePct} durationMs={250} suffix="%" />
+              </span>
+              <span className="text-xs text-emerald-400 font-medium">
+                {acquiredParcelsCount.toLocaleString()} parcels cleared
+              </span>
+            </div>
+            <div className="mt-4">
+              <ProgressBar
+                value={clearancePct}
+                size="md"
+                color={clearancePct >= 70 ? 'emerald' : 'blue'}
+              />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between text-xs text-slate-400">
+            <span>Possession handed over: <strong className="text-slate-200 font-mono">{acquiredParcelsCount}</strong></span>
+            <span>Pending: <strong className="text-slate-200 font-mono">{pendingParcelsCount}</strong></span>
+          </div>
+        </div>
+
+        {/* Card 3: Monitored Corridors Scope */}
+        <div
+          id="kpi-corridor-portfolio"
+          className="lg:col-span-3 bg-slate-900/70 rounded-lg border border-slate-800 p-6 shadow-lg flex flex-col justify-between"
+        >
+          <div>
+            <div className="flex items-center justify-between text-slate-400 mb-1">
+              <span className="text-xs font-medium text-slate-400">
+                Monitored Corridors
+              </span>
+              <MapPin className="w-4 h-4 text-blue-400" />
+            </div>
+            <div className="pt-2 flex items-baseline gap-2">
+              <span className="text-3xl font-bold font-mono text-white tabular-nums">
+                {totalActiveProjects}
+              </span>
+              <span className="text-xs text-slate-400">
+                active projects
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-2 leading-relaxed">
+              Covering expressways, metro corridors, and freight lines across 3 states.
             </p>
-            <div className="hidden lg:flex items-center justify-center absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full border border-slate-300 z-10 text-slate-400 text-xs shadow-2xs font-mono">
-              →
-            </div>
           </div>
 
-          {/* 02. PREDICT */}
-          <div className="p-3 bg-slate-50 rounded-xs border border-slate-200 relative group hover:border-slate-300 transition-colors">
-            <div className="flex items-center justify-between text-slate-500 mb-1 font-mono">
-              <span className="text-[10px] font-bold uppercase text-slate-700">2. PREDICT</span>
-              <span className="text-[9px] text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded-xs border border-amber-200 font-semibold">RISK</span>
-            </div>
-            <span className="font-bold text-slate-900 block text-xs font-sans">Forecast Delay Risk</span>
-            <p className="text-[11px] text-slate-500 font-sans mt-0.5 leading-snug">
-              Estimates delay probability and days beyond statutory schedules.
-            </p>
-            <div className="hidden lg:flex items-center justify-center absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full border border-slate-300 z-10 text-slate-400 text-xs shadow-2xs font-mono">
-              →
-            </div>
-          </div>
-
-          {/* 03. EXPLAIN */}
-          <div className="p-3 bg-slate-50 rounded-xs border border-slate-200 relative group hover:border-slate-300 transition-colors">
-            <div className="flex items-center justify-between text-slate-500 mb-1 font-mono">
-              <span className="text-[10px] font-bold uppercase text-slate-700">3. EXPLAIN</span>
-              <span className="text-[9px] text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded-xs border border-indigo-200 font-semibold">REASONS</span>
-            </div>
-            <span className="font-bold text-slate-900 block text-xs font-sans">Identify Root Causes</span>
-            <p className="text-[11px] text-slate-500 font-sans mt-0.5 leading-snug">
-              Pinpoints exact reasons—like title disputes or valuation reviews.
-            </p>
-            <div className="hidden lg:flex items-center justify-center absolute -right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full border border-slate-300 z-10 text-slate-400 text-xs shadow-2xs font-mono">
-              →
-            </div>
-          </div>
-
-          {/* 04. ACT */}
-          <div className="p-3 bg-slate-50 rounded-xs border border-slate-200 group hover:border-slate-300 transition-colors">
-            <div className="flex items-center justify-between text-slate-500 mb-1 font-mono">
-              <span className="text-[10px] font-bold uppercase text-slate-700">4. ACT</span>
-              <span className="text-[9px] text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded-xs border border-emerald-200 font-semibold">ACTION</span>
-            </div>
-            <span className="font-bold text-slate-900 block text-xs font-sans">Recommended Steps</span>
-            <p className="text-[11px] text-slate-500 font-sans mt-0.5 leading-snug">
-              Suggests practical solutions before major milestones breach.
-            </p>
+          <div className="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between text-xs">
+            <span className="text-slate-400">Total Registry</span>
+            <span className="font-mono font-bold text-slate-200">
+              {totalParcelsCount.toLocaleString()} Parcels
+            </span>
           </div>
         </div>
-      </div>
-
-      {/* Top KPI Cards (5 cards) - Stack vertically on mobile, grid on sm/lg */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        {/* 1. Active Projects */}
-        <div
-          id="kpi-active-projects"
-          className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs hover:border-slate-300 transition-colors border-t-2 border-t-blue-600"
-        >
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600">Active Projects</span>
-            <FolderKanban className="w-4 h-4 text-blue-600" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-slate-900 tabular-nums">
-              <CountUpNumber value={totalActiveProjects} durationMs={250} />
-            </span>
-            <span className="text-[10px] font-mono font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded-xs border border-emerald-200">
-              Active Corridors
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-slate-500 mt-2">
-            State & national infrastructure
-          </p>
         </div>
+      </ScrollReveal>
 
-        {/* 2. Total Parcels */}
-        <div
-          id="kpi-parcels-acquisition"
-          className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs hover:border-slate-300 transition-colors border-t-2 border-t-slate-700"
-        >
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600">Total Parcels Monitored</span>
-            <MapPin className="w-4 h-4 text-slate-600" />
+      {/* 3. Geospatial Risk Hotspots Map */}
+      <ScrollReveal delayMs={160}>
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-semibold text-white tracking-tight">
+                Geospatial Risk Hotspots
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Interactive geographic clustering of delay probabilities and statutory bottlenecks along corridor alignments.
+              </p>
+            </div>
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-slate-900 tabular-nums">
-              <CountUpNumber value={totalParcelsCount} durationMs={250} formatWithCommas={true} />
-            </span>
-            <span className="text-[10px] font-mono font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.2 rounded-xs border border-slate-200">
-              {pendingParcelsCount} Pending
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-slate-500 mt-2">
-            <CountUpNumber value={clearancePct} durationMs={250} suffix="%" /> possession cleared
-          </p>
-        </div>
+          <GISRiskHotspots
+            parcels={parcels}
+            selectedState={selectedState}
+            selectedDistrict={selectedDistrict}
+            searchQuery={searchQuery}
+            onSelectParcel={onSelectParcel}
+            onSelectProject={onSelectProject}
+          />
+        </section>
+      </ScrollReveal>
 
-        {/* 3. High-Risk Parcels */}
-        <div
-          id="kpi-high-risk-parcels"
-          className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs hover:border-slate-300 transition-colors border-t-2 border-t-rose-600"
-        >
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-rose-800">High-Risk Parcels</span>
-            <AlertOctagon className="w-4 h-4 text-rose-600" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-rose-700 tabular-nums">
-              <CountUpNumber value={highRiskParcelsCount} durationMs={250} />
-            </span>
-            <span className="text-[10px] font-mono font-semibold text-rose-800 bg-rose-50 px-1.5 py-0.2 rounded-xs border border-rose-200">
-              <CountUpNumber value={parseFloat(highRiskPct)} decimals={1} durationMs={250} suffix="%" /> of total
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-slate-500 mt-2">
-            Over 60% delay probability
-          </p>
-        </div>
-
-        {/* 4. Predicted / Mean Delay */}
-        <div
-          id="kpi-predicted-delays"
-          className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs hover:border-slate-300 transition-colors border-t-2 border-t-amber-500"
-        >
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600">Average Projected Delay</span>
-            <Clock className="w-4 h-4 text-amber-600" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-slate-900 tabular-nums">
-              <CountUpNumber value={parseFloat(avgPredictedDelay)} decimals={1} durationMs={250} />
-            </span>
-            <span className="text-[11px] font-mono text-slate-600">Days</span>
-            <span className="text-[10px] font-mono font-semibold text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded-xs border border-amber-200">
-              Avg Variance
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-slate-500 mt-2">
-            Average buffer beyond planned schedule
-          </p>
-        </div>
-
-        {/* 5. Critical Alerts */}
-        <div
-          id="kpi-critical-alerts"
-          className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs hover:border-slate-300 transition-colors border-t-2 border-t-rose-500"
-        >
-          <div className="flex items-center justify-between text-slate-500 mb-1.5">
-            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-rose-800">High-Priority Alerts</span>
-            <ShieldAlert className="w-4 h-4 text-rose-600" />
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold font-mono text-rose-700 tabular-nums">
-              <CountUpNumber value={MOCK_EARLY_WARNINGS.filter((w) => w.severity === 'High').length} durationMs={250} />
-            </span>
-            <span className="text-[10px] font-mono font-semibold text-rose-800 bg-rose-50 px-1.5 py-0.2 rounded-xs border border-rose-200">
-              Action Req.
-            </span>
-          </div>
-          <p className="text-[11px] font-sans text-slate-500 mt-2">
-            Parcels needing immediate intervention
-          </p>
-        </div>
-      </div>
-
-      {/* Main Section: Acquisition Risk Overview (LEFT) and Priority Intervention Queue (RIGHT) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* LEFT: Acquisition Risk Overview */}
+      {/* 4. Risk Breakdown & Priority Interventions (2-Column Balanced Grid) */}
+      <ScrollReveal delayMs={240}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Overall Risk Breakdown */}
         <div
           id="acquisition-risk-overview"
-          className="lg:col-span-5 bg-white rounded-xs border border-slate-200 p-4 shadow-2xs space-y-3.5"
+          className="lg:col-span-5 bg-slate-900/80 rounded-lg border border-slate-800 p-6 shadow-lg space-y-5"
         >
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div>
-              <h2 className="text-xs font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center gap-1.5">
-                <span>Risk Overview</span>
+              <h2 className="text-sm font-semibold text-white tracking-tight">
+                Risk Level Distribution
               </h2>
-              <p className="text-[11px] text-slate-500 mt-0.5 font-mono">
-                "How much acquisition is currently at risk?"
+              <p className="text-xs text-slate-400 mt-0.5">
+                Delay vulnerability across all {totalParcelsCount.toLocaleString()} registry parcels
               </p>
             </div>
             <button
               onClick={onNavigateToParcels}
-              className="text-xs font-mono font-medium text-blue-600 hover:text-blue-800 flex items-center gap-0.5 cursor-pointer"
+              className="text-xs font-medium text-blue-400 hover:text-blue-300 flex items-center gap-1 cursor-pointer transition-colors"
             >
-              Registry <ChevronRight className="w-3.5 h-3.5" />
+              Full Registry <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -313,218 +262,187 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
             total={totalParcelsCount}
           />
 
-          <div className="p-2.5 bg-slate-50 rounded-xs border border-slate-200 text-xs text-slate-600 leading-relaxed font-mono text-[11px]">
-            <strong className="text-slate-900 uppercase">POLICY INSIGHT: </strong>
-            High-risk concentration is greatest in Compensation (Section 19) and Valuation stages where titleholder co-sharer disputes stall treasury disbursement.
+          <div className="pt-2 text-xs text-slate-400 leading-relaxed border-t border-slate-800/80">
+            <span className="font-semibold text-slate-300 block mb-1">Key Systemic Finding:</span>
+            Delays are concentrated primarily in <span className="text-slate-200">Compensation (Section 19)</span> and{' '}
+            <span className="text-slate-200">Valuation</span> stages, driven by co-sharer apportionment disputes and pending title mutations.
           </div>
         </div>
 
-        {/* RIGHT: Priority Intervention Queue */}
+        {/* Right Column: Priority Intervention Queue (Clean horizontal flow, no nested boxes) */}
         <div
           id="priority-attention-cases"
-          className="lg:col-span-7 bg-white rounded-xs border border-slate-200 p-4 shadow-2xs flex flex-col justify-between"
+          className="lg:col-span-7 bg-slate-900/80 rounded-lg border border-slate-800 p-6 shadow-lg space-y-5"
         >
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2.5 mb-2.5">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div>
-              <h2 className="text-xs font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center gap-2">
-                <span>Priority Intervention Cases</span>
-                <span className="text-[10px] bg-rose-100 text-rose-800 font-bold px-1.5 py-0.2 rounded-xs border border-rose-300 font-mono">
-                  ACTION REQUIRED
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-white tracking-tight">
+                  Priority Intervention Queue
+                </h2>
+                <span className="text-[11px] font-mono text-rose-400 bg-rose-950/60 border border-rose-800/80 px-2 py-0.5 rounded">
+                  Critical
                 </span>
-              </h2>
-              <p className="text-[11px] text-slate-500 mt-0.5">
-                Immediate attention needed: Risk → Why → Predicted Delay → What To Do
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Top parcels requiring immediate administrative or legal intervention before schedule slippage
               </p>
             </div>
-            <span className="text-[10px] text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded-xs border border-slate-200">
-              TOP 4 CRITICAL CASES
+            <span className="text-xs font-mono text-slate-400">
+              Top 4 Cases
             </span>
           </div>
 
-          {/* Structured Priority Cases: RISK -> WHY -> PREDICTED DELAY -> WHAT TO DO */}
+          {/* Clean List Items — Generous whitespace, no nested mini-boxes */}
           <div className="space-y-3">
             {priorityCases.map((parcel) => (
               <div
                 key={parcel.id}
                 onClick={() => onSelectParcel(parcel.id)}
-                className="p-3.5 rounded-xs border border-slate-200 hover:border-blue-300 bg-white hover:bg-slate-50/40 cursor-pointer transition-all shadow-2xs space-y-2.5 group relative"
+                className="p-4 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-950/60 hover:bg-slate-900 transition-all cursor-pointer space-y-2.5 group"
               >
-                {/* Header: Parcel, Project & District */}
-                <div className="flex flex-wrap items-center justify-between gap-1 border-b border-slate-100 pb-1.5 font-mono text-xs">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                {/* Row 1: Identifiers and Risk Level */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <span className="font-mono text-xs font-bold text-white group-hover:text-blue-400 transition-colors">
                       {parcel.id}
                     </span>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-[11px] text-slate-700 font-sans font-medium">
+                    <span className="text-slate-600">•</span>
+                    <span className="text-xs text-slate-300">
                       {parcel.district}, {parcel.state}
                     </span>
-                    <span className="text-slate-300">•</span>
-                    <span className="text-[10px] font-sans text-slate-500">
+                    <span className="text-slate-600">•</span>
+                    <span className="text-xs text-slate-400">
                       {parcel.projectName}
                     </span>
                   </div>
-                  <span className="text-[10px] font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.2 rounded-xs border border-slate-200">
-                    Stage: {parcel.stage}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-400">Stage: <strong className="text-slate-300 font-normal">{parcel.stage}</strong></span>
+                    <RiskBadge level={parcel.riskLevel} size="sm" />
+                  </div>
                 </div>
 
-                {/* 4-Step Clarity Flow: Risk -> Why -> Predicted Delay -> What To Do */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
-                  {/* 1. RISK */}
-                  <div className="bg-rose-50/60 p-2 rounded-xs border border-rose-200">
-                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-rose-900 block">
-                      1. RISK
+                {/* Row 2: Delay Impact & Root Cause */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs pt-1 border-t border-slate-800/60">
+                  <div className="md:col-span-3">
+                    <span className="text-[11px] text-slate-500 block">Predicted Delay</span>
+                    <span className="font-mono font-bold text-rose-400 text-xs">
+                      +{parcel.predictedDelayDays} days
                     </span>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <RiskBadge level={parcel.riskLevel} size="sm" />
-                      <span className="font-mono font-bold text-rose-800 text-xs">
-                        {parcel.riskScore}/100
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-rose-700 font-mono block mt-0.5">
-                      {parcel.delayProbability}% delay chance
-                    </span>
+                    <span className="text-[11px] text-slate-500 block">({parcel.delayProbability}% likelihood)</span>
                   </div>
 
-                  {/* 2. WHY */}
-                  <div className="bg-slate-50 p-2 rounded-xs border border-slate-200">
-                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-700 block">
-                      2. WHY (PRIMARY CAUSE)
-                    </span>
-                    <p className="text-[11px] text-slate-800 font-sans font-medium leading-snug line-clamp-2 mt-1">
-                      {parcel.riskDrivers[0]?.factor || 'Titleholder dispute & disbursement backlog'}
+                  <div className="md:col-span-5">
+                    <span className="text-[11px] text-slate-500 block">Primary Risk Factor</span>
+                    <p className="text-slate-300 line-clamp-1 mt-0.5">
+                      {parcel.riskDrivers[0]?.factor || parcel.primaryRiskFactor}
                     </p>
                   </div>
 
-                  {/* 3. PREDICTED DELAY */}
-                  <div className="bg-amber-50/70 p-2 rounded-xs border border-amber-200">
-                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-900 block">
-                      3. PREDICTED DELAY
+                  <div className="md:col-span-4 flex flex-col justify-between items-start md:items-end">
+                    <span className="text-[11px] text-slate-500 block">Recommended Action</span>
+                    <p className="text-slate-300 text-left md:text-right line-clamp-1 mt-0.5">
+                      {parcel.recommendedActions[0]?.action || 'Convene joint collectorate resolution review'}
+                    </p>
+                    <span className="text-xs font-medium text-blue-400 group-hover:text-blue-300 inline-flex items-center gap-1 mt-1">
+                      Inspect details →
                     </span>
-                    <span className="font-mono font-bold text-amber-900 text-xs block mt-1">
-                      +{parcel.predictedDelayDays} Days
-                    </span>
-                    <span className="text-[10px] text-amber-800 font-sans block mt-0.5">
-                      beyond target schedule
-                    </span>
-                  </div>
-
-                  {/* 4. WHAT TO DO */}
-                  <div className="bg-blue-50/60 p-2 rounded-xs border border-blue-200 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-blue-900 block">
-                        4. WHAT TO DO
-                      </span>
-                      <p className="text-[11px] text-slate-900 font-sans font-medium leading-snug line-clamp-2 mt-1">
-                        {parcel.recommendedActions[0]?.action || 'Convene joint collectorate resolution review'}
-                      </p>
-                    </div>
-                    <div className="pt-1.5 text-right">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-700 group-hover:text-blue-900 font-mono">
-                        Inspect Case →
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-100 mt-2.5 flex items-center justify-between">
-            <span className="text-[11px] text-slate-500">
-              Showing top 4 critical delays requiring proactive resolution
+          <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+            <span className="text-xs text-slate-400">
+              Showing top cases ranked by predictive risk score
             </span>
             <button
               onClick={onNavigateToParcels}
-              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xs text-xs font-semibold shadow-2xs inline-flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-xs font-medium shadow-sm inline-flex items-center gap-1.5 cursor-pointer transition-colors"
             >
-              <span>View All {highRiskParcelsCount} High-Risk Parcels</span>
+              <span>View All High-Risk Parcels</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-      </div>
+        </div>
+      </ScrollReveal>
 
-      {/* GIS RISK HOTSPOTS: "WHERE IS THE RISK?" */}
-      <GISRiskHotspots
-        onSelectParcel={onSelectParcel}
-        onSelectProject={onSelectProject}
-      />
-
-      {/* Middle Section: Project Progress Table */}
-      <div
-        id="project-progress-section"
-        className="bg-white rounded-xs border border-slate-200 shadow-2xs overflow-hidden"
-      >
-        <div className="p-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-50">
+      {/* 5. Project Acquisition Progress & Schedule Variance Table */}
+      <ScrollReveal delayMs={240}>
+        <section
+          id="project-progress-section"
+          className="bg-slate-900/80 rounded-lg border border-slate-800 shadow-lg overflow-hidden"
+        >
+        <div className="p-5 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-xs font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center gap-2">
-              <span>Project Progress & Delay Risk</span>
-              <span className="text-[10px] font-mono text-slate-500 bg-white px-1.5 py-0.2 rounded-xs border border-slate-200 font-normal">
-                {projects.length} ACTIVE PROJECTS
+            <h2 className="text-sm font-semibold text-white tracking-tight flex items-center gap-2">
+              <span>Project Acquisition Progress & Delay Risk</span>
+              <span className="text-xs font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 font-normal">
+                {projects.length} Corridors
               </span>
             </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5 font-sans">
-              Track acquisition progress, land possession clearance, and forecast delays across all project corridors.
+            <p className="text-xs text-slate-400 mt-0.5">
+              Corridor right-of-way progress, possession clearance, and forecast delay variance across active projects.
             </p>
           </div>
           <button
             onClick={onNavigateToProjects}
-            className="text-xs font-mono font-semibold text-blue-600 hover:text-blue-800 flex items-center gap-1 self-start sm:self-auto cursor-pointer"
+            className="text-xs font-medium text-blue-400 hover:text-blue-300 flex items-center gap-1 self-start sm:self-auto cursor-pointer transition-colors"
           >
-            Open Projects Grid ({projects.length}) <ChevronRight className="w-3.5 h-3.5" />
+            All Projects ({projects.length}) <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[760px] text-left text-xs text-slate-700 border-collapse">
-            <thead className="bg-slate-100 text-slate-600 font-semibold border-b border-slate-200 uppercase text-[10px] font-mono tracking-wider sticky top-0 z-10">
+          <table className="w-full min-w-[760px] text-left text-xs text-slate-300 border-collapse">
+            <thead className="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800 text-xs sticky top-0 z-10">
               <tr>
-                <th className="py-2.5 px-3.5 border-r-2 border-slate-200 sticky left-0 bg-slate-100 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.08)]">
+                <th className="py-3 px-4 border-r border-slate-800 sticky left-0 bg-slate-950 z-20">
                   Code
                 </th>
-                <th className="py-2.5 px-3.5 min-w-[220px] border-r border-slate-200/80">Project & Agency</th>
-                <th className="py-2.5 px-3.5 border-r border-slate-200/80">District / State</th>
-                <th className="py-2.5 px-3.5 text-right border-r border-slate-200/80">Total</th>
-                <th className="py-2.5 px-3.5 text-right border-r border-slate-200/80">Acquired</th>
-                <th className="py-2.5 px-3.5 text-right border-r border-slate-200/80">Pending</th>
-                <th className="py-2.5 px-3.5 min-w-[150px] border-r border-slate-200/80">Progress</th>
-                <th className="py-2.5 px-3.5 text-center border-r border-slate-200/80">Risk Level</th>
-                <th className="py-2.5 px-3.5 text-right">Predicted Delay</th>
+                <th className="py-3 px-4 min-w-[220px] border-r border-slate-800/80">Project & Agency</th>
+                <th className="py-3 px-4 border-r border-slate-800/80">District / State</th>
+                <th className="py-3 px-4 text-right border-r border-slate-800/80">Total</th>
+                <th className="py-3 px-4 text-right border-r border-slate-800/80">Acquired</th>
+                <th className="py-3 px-4 text-right border-r border-slate-800/80">Pending</th>
+                <th className="py-3 px-4 min-w-[140px] border-r border-slate-800/80">Progress</th>
+                <th className="py-3 px-4 text-center border-r border-slate-800/80">Risk Level</th>
+                <th className="py-3 px-4 text-right">Predicted Delay</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 font-mono text-[11px]">
+            <tbody className="divide-y divide-slate-800/80 text-xs">
               {projects.map((project) => (
                 <tr
                   key={project.id}
                   onClick={() => onSelectProject(project.id)}
-                  className="hover:bg-blue-50/50 cursor-pointer transition-colors group"
+                  className="hover:bg-slate-850 cursor-pointer transition-colors group"
                 >
-                  <td className="py-2.5 px-3.5 font-bold text-slate-900 group-hover:text-blue-600 border-r-2 border-slate-200 sticky left-0 bg-white group-hover:bg-blue-50/95 z-10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.08)]">
+                  <td className="py-3 px-4 font-mono font-semibold text-white group-hover:text-blue-400 border-r border-slate-800 sticky left-0 bg-slate-900 group-hover:bg-slate-850 z-10">
                     {project.code}
                   </td>
-                  <td className="py-2.5 px-3.5 font-sans border-r border-slate-100">
-                    <span className="font-semibold text-slate-900 block group-hover:text-blue-600 text-xs">
+                  <td className="py-3 px-4 border-r border-slate-800/60">
+                    <span className="font-medium text-white block group-hover:text-blue-400">
                       {project.name}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-mono">
-                      AGENCY: {project.implementingAgency}
+                    <span className="text-[11px] text-slate-400 font-mono">
+                      Agency: {project.implementingAgency}
                     </span>
                   </td>
-                  <td className="py-2.5 px-3.5 text-slate-600 border-r border-slate-100 font-sans text-xs">
+                  <td className="py-3 px-4 text-slate-400 border-r border-slate-800/60">
                     {project.district}, {project.state}
                   </td>
-                  <td className="py-2.5 px-3.5 text-right font-medium text-slate-800 border-r border-slate-100 tabular-nums">
+                  <td className="py-3 px-4 text-right font-mono text-slate-300 border-r border-slate-800/60 tabular-nums">
                     {project.totalParcels}
                   </td>
-                  <td className="py-2.5 px-3.5 text-right text-emerald-700 font-medium border-r border-slate-100 tabular-nums">
+                  <td className="py-3 px-4 text-right font-mono text-emerald-400 border-r border-slate-800/60 tabular-nums">
                     {project.acquiredParcels}
                   </td>
-                  <td className="py-2.5 px-3.5 text-right text-amber-700 font-medium border-r border-slate-100 tabular-nums">
+                  <td className="py-3 px-4 text-right font-mono text-amber-400 border-r border-slate-800/60 tabular-nums">
                     {project.pendingParcels}
                   </td>
-                  <td className="py-2.5 px-3.5 border-r border-slate-100">
+                  <td className="py-3 px-4 border-r border-slate-800/60">
                     <ProgressBar
                       value={project.progressPercent}
                       size="sm"
@@ -538,17 +456,17 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       }
                     />
                   </td>
-                  <td className="py-2.5 px-3.5 text-center border-r border-slate-100">
+                  <td className="py-3 px-4 text-center border-r border-slate-800/60">
                     <RiskBadge level={project.overallRisk} size="sm" />
                   </td>
-                  <td className="py-2.5 px-3.5 text-right font-bold tabular-nums">
+                  <td className="py-3 px-4 text-right font-mono font-semibold tabular-nums">
                     <span
                       className={
                         project.predictedDelayDays > 40
-                          ? 'text-rose-600'
+                          ? 'text-rose-400'
                           : project.predictedDelayDays > 20
-                          ? 'text-amber-700'
-                          : 'text-emerald-700'
+                          ? 'text-amber-400'
+                          : 'text-emerald-400'
                       }
                     >
                       +{project.predictedDelayDays}d
@@ -559,30 +477,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* Bottom Section: Delay Risk Trend */}
-      <div
-        id="delay-risk-trend-section"
-        className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs space-y-3"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
-          <div>
-            <h2 className="text-xs font-bold text-slate-900 font-mono uppercase tracking-wider flex items-center gap-2">
-              <span>Portfolio Delay Risk Trend & Projection</span>
-              <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded-xs border border-slate-200 font-normal">
-                PROJECTED HORIZON
-              </span>
-            </h2>
-            <p className="text-[11px] text-slate-500 mt-0.5 font-sans">
-              Historical 6-month delay trend with 60-day predictive forecast across active corridors.
-            </p>
-          </div>
-        </div>
-
-        <LineTrendChart />
-      </div>
+      </section>
+      </ScrollReveal>
     </div>
   );
 };
-

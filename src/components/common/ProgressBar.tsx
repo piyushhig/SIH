@@ -32,14 +32,14 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div className={`w-full flex items-center gap-2 ${className}`}>
-      <div className={`w-full bg-slate-100 rounded-xs border border-slate-200/80 overflow-hidden ${heightClasses}`}>
+      <div className={`w-full bg-slate-900 rounded border border-slate-800/90 overflow-hidden ${heightClasses}`}>
         <div
-          className={`h-full rounded-xs transition-all duration-300 ${colorClasses}`}
+          className={`h-full rounded transition-all duration-300 ${colorClasses}`}
           style={{ width: `${clamped}%` }}
         />
       </div>
       {showLabel && (
-        <span className="text-xs font-mono font-semibold text-slate-700 min-w-[3rem] text-right">
+        <span className="text-xs font-mono font-semibold text-slate-300 min-w-[3rem] text-right">
           {clamped}%
         </span>
       )}

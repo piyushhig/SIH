@@ -48,15 +48,15 @@ export const HorizontalBarChart: React.FC = () => {
   return (
     <div id="delay-factor-contribution-component" className="w-full space-y-3 font-sans">
       {/* Top Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2 text-[11px] font-mono">
-        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xs border border-slate-200">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 text-[11px] font-mono">
+        <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-800">
           <button
             type="button"
             onClick={() => setSortKey('delay')}
-            className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
               sortKey === 'delay'
-                ? 'bg-white text-slate-900 font-bold shadow-2xs border border-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-slate-800 text-white font-bold shadow-sm border border-slate-700'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             ORDER BY DELAY IMPACT (+DAYS)
@@ -64,36 +64,36 @@ export const HorizontalBarChart: React.FC = () => {
           <button
             type="button"
             onClick={() => setSortKey('prevalence')}
-            className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
               sortKey === 'prevalence'
-                ? 'bg-white text-slate-900 font-bold shadow-2xs border border-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-slate-800 text-white font-bold shadow-sm border border-slate-700'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             ORDER BY FREQUENCY (% PREVALENCE)
           </button>
         </div>
 
-        <span className="text-slate-500">
-          RANKED BY <strong className="text-slate-800">{sortKey === 'delay' ? 'MEAN DAYS ADDED' : 'SYSTEM INCIDENCE'}</strong>
+        <span className="text-slate-400">
+          RANKED BY <strong className="text-slate-200">{sortKey === 'delay' ? 'MEAN DAYS ADDED' : 'SYSTEM INCIDENCE'}</strong>
         </span>
       </div>
 
       {/* Factor List */}
       <div className="space-y-2.5">
         {data.map((item) => {
-          let barColor = 'bg-slate-400';
-          let badgeColor = 'bg-slate-100 text-slate-700 border-slate-200';
+          let barColor = 'bg-slate-500';
+          let badgeColor = 'bg-slate-900 text-slate-400 border-slate-800';
 
           if (item.severity === 'High') {
-            barColor = 'bg-rose-600';
-            badgeColor = 'bg-rose-50 text-rose-700 border-rose-200';
+            barColor = 'bg-rose-500';
+            badgeColor = 'bg-rose-950/60 text-rose-300 border-rose-800';
           } else if (item.severity === 'Medium') {
             barColor = 'bg-amber-500';
-            badgeColor = 'bg-amber-700 bg-amber-50 border-amber-200';
+            badgeColor = 'bg-amber-950/60 text-amber-300 border-amber-800';
           } else {
-            barColor = 'bg-emerald-600';
-            badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            barColor = 'bg-emerald-500';
+            badgeColor = 'bg-emerald-950/60 text-emerald-300 border-emerald-800';
           }
 
           const isHovered = hoveredFactor === item.factor;
@@ -107,38 +107,38 @@ export const HorizontalBarChart: React.FC = () => {
               key={item.factor}
               onMouseEnter={() => setHoveredFactor(item.factor)}
               onMouseLeave={() => setHoveredFactor(null)}
-              className={`p-2.5 rounded-xs border transition-all cursor-pointer ${
+              className={`p-2.5 rounded border transition-all cursor-pointer ${
                 isHovered
-                  ? 'bg-blue-50/50 border-blue-300 shadow-2xs'
-                  : 'bg-slate-50/40 border-slate-200/80 hover:bg-slate-50'
+                  ? 'bg-slate-800/90 border-blue-500/80 shadow-md'
+                  : 'bg-slate-950/60 border-slate-800 hover:bg-slate-900'
               }`}
             >
               <div className="flex flex-wrap items-center justify-between text-xs gap-1 mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-xs border font-mono font-bold ${badgeColor}`}>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded border font-mono font-bold ${badgeColor}`}>
                     {item.severity}
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded-xs border bg-white border-slate-200 font-mono text-slate-600">
+                  <span className="text-[10px] px-1.5 py-0.5 rounded border bg-slate-900 border-slate-800 font-mono text-slate-300">
                     {meta.category}
                   </span>
-                  <span className="font-semibold text-slate-900 font-mono text-xs">{item.factor}</span>
+                  <span className="font-semibold text-white font-mono text-xs">{item.factor}</span>
                 </div>
 
                 <div className="flex items-center gap-3 font-mono text-xs">
-                  <span className="text-slate-500 text-[11px]">
-                    Frequency: <strong className="text-slate-800">{item.prevalence}%</strong>
+                  <span className="text-slate-400 text-[11px]">
+                    Frequency: <strong className="text-slate-200">{item.prevalence}%</strong>
                   </span>
-                  <span className="text-slate-600 font-semibold text-xs">
-                    Impact: <strong className="text-rose-600 font-mono">+{item.avgDelayImpactDays} days</strong>
+                  <span className="text-slate-300 font-semibold text-xs">
+                    Impact: <strong className="text-rose-400 font-mono">+{item.avgDelayImpactDays} days</strong>
                   </span>
                 </div>
               </div>
 
               {/* Progress bar reflecting delay weight */}
-              <div className="w-full h-2 bg-slate-200/80 rounded-xs overflow-hidden flex">
+              <div className="w-full h-1.5 bg-slate-900 rounded overflow-hidden flex">
                 <div
-                  className={`h-full rounded-xs transition-all duration-300 ${barColor} ${
-                    isHovered ? 'brightness-110' : ''
+                  className={`h-full rounded transition-all duration-300 ${barColor} ${
+                    isHovered ? 'brightness-125' : ''
                   }`}
                   style={{
                     width: `${
@@ -152,9 +152,9 @@ export const HorizontalBarChart: React.FC = () => {
 
               {/* Actionable Statutory Mitigation Protocol */}
               {isHovered && (
-                <div className="mt-2 pt-1.5 border-t border-slate-200 text-[11px] font-mono text-slate-700">
-                  <span className="font-bold text-slate-900">MITIGATION PROTOCOL: </span>
-                  <span className="text-slate-600">{meta.remedyAction}</span>
+                <div className="mt-2 pt-1.5 border-t border-slate-800 text-[11px] font-mono text-slate-300">
+                  <span className="font-bold text-white">MITIGATION PROTOCOL: </span>
+                  <span className="text-slate-400">{meta.remedyAction}</span>
                 </div>
               )}
             </div>

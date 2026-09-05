@@ -43,31 +43,31 @@ export const DistrictRiskChart: React.FC = () => {
           return (
             <div
               key={item.district}
-              className="p-2.5 rounded-xs border border-slate-200 hover:border-slate-300 bg-slate-50/50 transition-colors space-y-1.5"
+              className="p-3 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-950/60 transition-colors space-y-2"
             >
               <div className="flex flex-wrap items-center justify-between text-xs font-mono">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-900 font-sans text-xs">{item.district}</span>
-                  <span className="text-[10px] text-slate-500">({item.state})</span>
+                  <span className="font-bold text-white font-sans text-xs">{item.district}</span>
+                  <span className="text-[10px] text-slate-400">({item.state})</span>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-slate-600">
-                    <strong className="text-slate-900">{item.highRiskCount}</strong> / {item.totalParcels} High Risk
+                  <span className="text-[11px] text-slate-300">
+                    <strong className="text-white">{item.highRiskCount}</strong> / {item.totalParcels} High Risk
                   </span>
-                  <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded-xs border ${badgeColor}`}>
+                  <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${badgeColor}`}>
                     RISK {item.avgRiskScore}/100
                   </span>
-                  <span className="text-xs font-bold text-slate-900 tabular-nums">
+                  <span className="text-xs font-bold text-slate-200 tabular-nums">
                     +{item.avgDelayDays}d
                   </span>
                 </div>
               </div>
 
               {/* Progress bar representing comparative delay horizon */}
-              <div className="w-full h-1.5 bg-slate-200 rounded-xs overflow-hidden">
+              <div className="w-full h-1.5 bg-slate-900 rounded overflow-hidden">
                 <div
-                  className={`h-full rounded-xs transition-all duration-300 ${barColor}`}
+                  className={`h-full rounded transition-all duration-300 ${barColor}`}
                   style={{ width: `${delayPercent}%` }}
                 />
               </div>
@@ -76,7 +76,7 @@ export const DistrictRiskChart: React.FC = () => {
         })}
       </div>
 
-      <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-100 pt-2">
+      <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 border-t border-slate-800/80 pt-2">
         <span>Source: Multi-project revenue jurisdiction registry</span>
         <span>Relative delay exposure normalized to statutory milestone targets</span>
       </div>

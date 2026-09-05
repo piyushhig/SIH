@@ -10,21 +10,21 @@ interface RiskBadgeProps {
 export const RiskBadge: React.FC<RiskBadgeProps> = ({ level, size = 'md', showDot = true }) => {
   const normalized = (level || '').toString().toLowerCase().trim();
   
-  let colorClasses = 'bg-emerald-50 text-emerald-800 border-emerald-300';
-  let dotColor = 'bg-emerald-600';
+  let colorClasses = 'bg-emerald-950/60 text-emerald-300 border-emerald-800/80 font-medium';
+  let dotColor = 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]';
   let label = 'LOW RISK';
 
   if (normalized.includes('high') || normalized === 'critical') {
-    colorClasses = 'bg-rose-50 text-rose-800 border-rose-300 font-semibold';
-    dotColor = 'bg-rose-600';
+    colorClasses = 'bg-rose-950/70 text-rose-300 border-rose-800/90 font-semibold';
+    dotColor = 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.7)] animate-pulse';
     label = 'HIGH RISK';
   } else if (normalized.includes('med') || normalized.includes('medium') || normalized === 'moderate') {
-    colorClasses = 'bg-amber-50 text-amber-800 border-amber-300 font-medium';
-    dotColor = 'bg-amber-500';
+    colorClasses = 'bg-amber-950/70 text-amber-300 border-amber-800/80 font-medium';
+    dotColor = 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]';
     label = 'MEDIUM RISK';
   } else {
-    colorClasses = 'bg-emerald-50 text-emerald-800 border-emerald-300 font-medium';
-    dotColor = 'bg-emerald-600';
+    colorClasses = 'bg-emerald-950/60 text-emerald-300 border-emerald-800/80 font-medium';
+    dotColor = 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]';
     label = 'LOW RISK';
   }
 
@@ -36,7 +36,7 @@ export const RiskBadge: React.FC<RiskBadgeProps> = ({ level, size = 'md', showDo
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-xs border whitespace-nowrap shadow-2xs select-none ${sizeClasses} ${colorClasses}`}
+      className={`inline-flex items-center gap-1.5 rounded border whitespace-nowrap select-none ${sizeClasses} ${colorClasses}`}
     >
       {showDot && <span className={`h-1.5 w-1.5 rounded-full ${dotColor} flex-shrink-0`} />}
       {label}

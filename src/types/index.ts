@@ -40,8 +40,11 @@ export interface LandParcel {
   khasraNo: string; // Survey/Gat number e.g. 142/2A
   village: string;
   taluka: string;
+  city?: string;
   district: string;
   state: string;
+  latitude?: number;
+  longitude?: number;
   projectId: string;
   projectName: string;
   areaHa: number; // in Hectares
@@ -69,6 +72,9 @@ export interface Project {
   code: string;
   state: string;
   district: string;
+  city?: string;
+  latitude?: number;
+  longitude?: number;
   implementingAgency: string; // e.g., NHAI, DFC, MMRDA, K-RIDE
   totalParcels: number;
   acquiredParcels: number;
@@ -111,4 +117,5 @@ export type ScreenId =
   | 'parcel-intelligence'
   | 'risk-analytics'
   | 'early-warnings'
-  | 'reports';
+  | 'reports'
+  | 'about';

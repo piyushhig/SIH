@@ -68,15 +68,15 @@ export const StageRiskChart: React.FC = () => {
   return (
     <div id="stage-risk-analytics-component" className="w-full space-y-3 font-sans">
       {/* Top Header & Filter Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2 font-mono text-xs">
-        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xs border border-slate-200 text-[11px]">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 font-mono text-xs">
+        <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded border border-slate-800 text-[11px]">
           <button
             type="button"
             onClick={() => setSortBy('risk')}
-            className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
               sortBy === 'risk'
-                ? 'bg-white text-slate-900 font-bold shadow-2xs border border-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-slate-800 text-white font-bold shadow-sm border border-slate-700'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             HIGHEST RISK FIRST
@@ -84,18 +84,18 @@ export const StageRiskChart: React.FC = () => {
           <button
             type="button"
             onClick={() => setSortBy('pipeline')}
-            className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+            className={`px-2.5 py-1 rounded transition-colors cursor-pointer ${
               sortBy === 'pipeline'
-                ? 'bg-white text-slate-900 font-bold shadow-2xs border border-slate-200/80'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-slate-800 text-white font-bold shadow-sm border border-slate-700'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             WORKFLOW PIPELINE ORDER
           </button>
         </div>
 
-        <span className="text-[11px] text-slate-500">
-          STATUTORY SLA BENCHMARK: <strong className="text-slate-800">RFCTLARR / NHAI 2013</strong>
+        <span className="text-[11px] text-slate-400">
+          STATUTORY SLA BENCHMARK: <strong className="text-slate-200">RFCTLARR / NHAI 2013</strong>
         </span>
       </div>
 
@@ -119,42 +119,42 @@ export const StageRiskChart: React.FC = () => {
             <div
               key={stage.stage}
               onClick={() => setSelectedStage(isSelected ? null : stage.stage)}
-              className={`p-3 rounded-xs border transition-all cursor-pointer ${
+              className={`p-3 rounded border transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-blue-50/60 border-blue-400 shadow-2xs'
-                  : 'bg-slate-50/40 border-slate-200/80 hover:bg-slate-50'
+                  ? 'bg-slate-800/90 border-blue-500/80 shadow-md'
+                  : 'bg-slate-950/60 border-slate-800 hover:bg-slate-900'
               }`}
             >
               {/* Header row */}
               <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs text-slate-400 font-bold">
+                  <span className="font-mono text-xs text-slate-500 font-bold">
                     0{index + 1}
                   </span>
-                  <span className="text-xs font-bold text-slate-900 font-mono">
+                  <span className="text-xs font-bold text-white font-mono">
                     {stage.stage}
                   </span>
-                  <span className="text-[10px] text-slate-500 bg-white px-2 py-0.2 rounded-xs border border-slate-200 font-mono">
+                  <span className="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 font-mono">
                     {meta.statutoryRef}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs font-mono">
-                  <span className="text-slate-600 text-[11px]">
-                    Parcels: <strong className="text-slate-900">{stage.parcels}</strong>
+                  <span className="text-slate-400 text-[11px]">
+                    Parcels: <strong className="text-slate-200">{stage.parcels}</strong>
                   </span>
-                  <span className="text-slate-600 text-[11px]">
-                    High-Risk: <strong className="text-rose-600">{stage.highRiskCount}</strong>
+                  <span className="text-slate-400 text-[11px]">
+                    High-Risk: <strong className="text-rose-400">{stage.highRiskCount}</strong>
                   </span>
                   <div className="flex items-center gap-1">
                     <span className="text-slate-500 text-[11px]">Index:</span>
                     <span
-                      className={`font-bold px-1.5 py-0.2 rounded-xs border text-[11px] ${
+                      className={`font-bold px-1.5 py-0.5 rounded border text-[11px] ${
                         isCritical
-                          ? 'bg-rose-50 text-rose-700 border-rose-200'
+                          ? 'bg-rose-950/60 text-rose-300 border-rose-800'
                           : isElevated
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          ? 'bg-amber-950/60 text-amber-300 border-amber-800'
+                          : 'bg-emerald-950/60 text-emerald-300 border-emerald-800'
                       }`}
                     >
                       {stage.avgRisk}/100
@@ -165,14 +165,14 @@ export const StageRiskChart: React.FC = () => {
 
               {/* Progress Bar comparison */}
               <div className="space-y-1 mb-2">
-                <div className="w-full h-2 bg-slate-200 rounded-xs overflow-hidden flex">
+                <div className="w-full h-1.5 bg-slate-900 rounded overflow-hidden flex">
                   <div
-                    className={`h-full rounded-xs transition-all duration-300 ${
+                    className={`h-full rounded transition-all duration-300 ${
                       isCritical
-                        ? 'bg-rose-600'
+                        ? 'bg-rose-500'
                         : isElevated
                         ? 'bg-amber-500'
-                        : 'bg-emerald-600'
+                        : 'bg-emerald-500'
                     }`}
                     style={{ width: `${stage.avgRisk}%` }}
                   />
@@ -180,23 +180,23 @@ export const StageRiskChart: React.FC = () => {
               </div>
 
               {/* Statutory Metric Telemetry */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px] font-mono text-slate-600 border-t border-slate-200/60">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1.5 text-[11px] font-mono text-slate-400 border-t border-slate-800/80">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                  <Clock className="w-3.5 h-3.5 text-slate-500" />
                   <span>
-                    Statutory SLA: <strong className="text-slate-800">{meta.legalSlaDays}d</strong> (Actual: {meta.actualAvgDays}d)
+                    Statutory SLA: <strong className="text-slate-200">{meta.legalSlaDays}d</strong> (Actual: {meta.actualAvgDays}d)
                   </span>
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <AlertTriangle className={`w-3.5 h-3.5 ${slaDelay > 0 ? 'text-amber-600' : 'text-emerald-600'}`} />
+                  <AlertTriangle className={`w-3.5 h-3.5 ${slaDelay > 0 ? 'text-amber-400' : 'text-emerald-400'}`} />
                   <span>
-                    Dwell Slippage: <strong className={slaDelay > 0 ? 'text-rose-600' : 'text-emerald-700'}>+{slaDelay} days</strong>
+                    Dwell Slippage: <strong className={slaDelay > 0 ? 'text-rose-400' : 'text-emerald-400'}>+{slaDelay} days</strong>
                   </span>
                 </div>
 
                 <div className="truncate text-slate-500">
-                  Driver: <span className="text-slate-800 font-medium">{meta.primaryRiskFactor}</span>
+                  Driver: <span className="text-slate-300 font-medium">{meta.primaryRiskFactor}</span>
                 </div>
               </div>
             </div>

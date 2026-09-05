@@ -160,28 +160,28 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
   };
 
   return (
-    <div className="bg-white rounded-xs border border-slate-200 p-4 shadow-2xs space-y-4 font-sans">
+    <div className="bg-slate-900/80 rounded-lg border border-slate-800 p-4 shadow-lg space-y-4 font-sans backdrop-blur-md">
       {/* Simulation Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
         <div>
           <div className="flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-blue-600" />
-            <h3 className="text-xs font-bold text-slate-900 font-mono uppercase tracking-wider">
+            <Sliders className="w-4 h-4 text-blue-400" />
+            <h3 className="text-xs font-bold text-white font-mono uppercase tracking-wider">
               What-If Risk Simulation Sandbox
             </h3>
           </div>
-          <p className="text-[11px] text-slate-500 mt-0.5 font-mono">
+          <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
             Adjust telemetry variables to evaluate impact on predicted delay horizon
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-xs">
+          <span className="text-[10px] font-mono text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded">
             SIMULATION ENGINE • SIH DEMO
           </span>
           <button
             onClick={handleReset}
-            className="flex items-center gap-1 text-[11px] font-mono text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-2 py-0.5 rounded-xs hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-1 text-[11px] font-mono text-slate-300 hover:text-white bg-slate-950 border border-slate-800 px-2 py-0.5 rounded hover:bg-slate-800 transition-colors cursor-pointer"
             title="Reset to parcel baseline"
           >
             <RotateCcw className="w-3 h-3" />
@@ -196,12 +196,12 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
         <div className="lg:col-span-7 space-y-3.5 font-mono text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* 1. Days in Current Stage */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] text-slate-700 font-bold uppercase">
+                <label className="text-[11px] text-slate-300 font-bold uppercase">
                   Days in Current Stage
                 </label>
-                <span className="font-bold text-slate-900 tabular-nums">{daysInStage}d</span>
+                <span className="font-bold text-white tabular-nums">{daysInStage}d</span>
               </div>
               <input
                 type="range"
@@ -210,21 +210,21 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
                 step="5"
                 value={daysInStage}
                 onChange={(e) => setDaysInStage(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer h-1.5"
+                className="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded"
               />
-              <div className="flex justify-between text-[9px] text-slate-400">
+              <div className="flex justify-between text-[9px] text-slate-500">
                 <span>5d (On Track)</span>
                 <span>180d (Stalled)</span>
               </div>
             </div>
 
             {/* 2. Documentation Completeness */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] text-slate-700 font-bold uppercase">
+                <label className="text-[11px] text-slate-300 font-bold uppercase">
                   Documentation Completeness
                 </label>
-                <span className="font-bold text-slate-900 tabular-nums">{docCompleteness}%</span>
+                <span className="font-bold text-white tabular-nums">{docCompleteness}%</span>
               </div>
               <input
                 type="range"
@@ -233,9 +233,9 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
                 step="5"
                 value={docCompleteness}
                 onChange={(e) => setDocCompleteness(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer h-1.5"
+                className="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded"
               />
-              <div className="flex justify-between text-[9px] text-slate-400">
+              <div className="flex justify-between text-[9px] text-slate-500">
                 <span>10% (Gaps)</span>
                 <span>100% (Certified)</span>
               </div>
@@ -244,14 +244,14 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* 3. Compensation Status */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
-              <label className="text-[11px] text-slate-700 font-bold uppercase block">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
+              <label className="text-[11px] text-slate-300 font-bold uppercase block">
                 Compensation Status
               </label>
               <select
                 value={compensationStatus}
                 onChange={(e) => setCompensationStatus(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xs p-1 text-[11px] text-slate-800 font-mono focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[11px] text-slate-200 font-mono focus:outline-none focus:border-blue-500"
               >
                 <option value="Disputed in Court">Disputed in Court</option>
                 <option value="Pending Award">Pending Award Approval</option>
@@ -261,14 +261,14 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
             </div>
 
             {/* 4. Legal Dispute */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
-              <label className="text-[11px] text-slate-700 font-bold uppercase block">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
+              <label className="text-[11px] text-slate-300 font-bold uppercase block">
                 Legal Dispute
               </label>
               <select
                 value={legalDispute}
                 onChange={(e) => setLegalDispute(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xs p-1 text-[11px] text-slate-800 font-mono focus:outline-none focus:border-blue-600"
+                className="w-full bg-slate-900 border border-slate-700 rounded p-1 text-[11px] text-slate-200 font-mono focus:outline-none focus:border-blue-500"
               >
                 <option value="Active Suit">Active Suit / Stay Notice</option>
                 <option value="Minor Inquiry">Minor Heirship Inquiry</option>
@@ -279,12 +279,12 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* 5. Survey Completion */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] text-slate-700 font-bold uppercase">
+                <label className="text-[10px] text-slate-300 font-bold uppercase">
                   Survey Completion
                 </label>
-                <span className="font-bold text-slate-900 tabular-nums">{surveyCompletion}%</span>
+                <span className="font-bold text-white tabular-nums">{surveyCompletion}%</span>
               </div>
               <input
                 type="range"
@@ -293,17 +293,17 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
                 step="10"
                 value={surveyCompletion}
                 onChange={(e) => setSurveyCompletion(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer h-1.5"
+                className="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded"
               />
             </div>
 
             {/* 6. Negotiation Attempts */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] text-slate-700 font-bold uppercase">
+                <label className="text-[10px] text-slate-300 font-bold uppercase">
                   Negotiation Attempts
                 </label>
-                <span className="font-bold text-slate-900 tabular-nums">{negotiationAttempts}</span>
+                <span className="font-bold text-white tabular-nums">{negotiationAttempts}</span>
               </div>
               <input
                 type="range"
@@ -312,17 +312,17 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
                 step="1"
                 value={negotiationAttempts}
                 onChange={(e) => setNegotiationAttempts(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer h-1.5"
+                className="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded"
               />
             </div>
 
             {/* 7. Previous Stage Delay */}
-            <div className="p-2.5 rounded-xs bg-slate-50 border border-slate-200 space-y-1">
+            <div className="p-2.5 rounded bg-slate-950/60 border border-slate-800 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] text-slate-700 font-bold uppercase">
+                <label className="text-[10px] text-slate-300 font-bold uppercase">
                   Prev Stage Lag
                 </label>
-                <span className="font-bold text-slate-900 tabular-nums">+{prevStageDelay}d</span>
+                <span className="font-bold text-white tabular-nums">+{prevStageDelay}d</span>
               </div>
               <input
                 type="range"
@@ -331,7 +331,7 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
                 step="5"
                 value={prevStageDelay}
                 onChange={(e) => setPrevStageDelay(Number(e.target.value))}
-                className="w-full accent-blue-600 cursor-pointer h-1.5"
+                className="w-full accent-blue-500 cursor-pointer h-1.5 bg-slate-800 rounded"
               />
             </div>
           </div>
@@ -340,7 +340,7 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
           <button
             onClick={runPrediction}
             disabled={isSimulating}
-            className="w-full py-2.5 px-4 rounded-xs bg-blue-900 hover:bg-blue-800 text-white font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer disabled:opacity-50"
+            className="w-full py-2.5 px-4 rounded bg-blue-600 hover:bg-blue-500 text-white font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
             {isSimulating ? (
               <>
@@ -357,50 +357,50 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
         </div>
 
         {/* Right: Real-time Updated Result Output */}
-        <div className="lg:col-span-5 bg-slate-50 rounded-xs border border-slate-200 p-4 flex flex-col justify-between space-y-3 font-mono">
+        <div className="lg:col-span-5 bg-slate-950/60 rounded border border-slate-800 p-4 flex flex-col justify-between space-y-3 font-mono">
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Simulated Output
               </span>
               <RiskBadge level={simulatedResult.riskLevel} size="sm" />
             </div>
 
             {/* Primary Score Comparison */}
-            <div className="bg-white p-3 rounded-xs border border-slate-200 space-y-2 text-center shadow-2xs">
+            <div className="bg-slate-900 p-3 rounded border border-slate-800 space-y-2 text-center shadow-md">
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-3xl font-extrabold font-mono text-slate-900 tabular-nums">
+                <span className="text-3xl font-extrabold font-mono text-white tabular-nums">
                   {simulatedResult.riskScore}
                 </span>
                 <span className="text-xs text-slate-400 font-bold">/ 100</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs border-t border-slate-100 pt-2">
+              <div className="grid grid-cols-2 gap-2 text-xs border-t border-slate-800 pt-2">
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Delay Probability</span>
-                  <strong className="text-slate-900 font-bold">{simulatedResult.delayProbability}%</strong>
+                  <span className="text-[10px] text-slate-400 uppercase block">Delay Probability</span>
+                  <strong className="text-white font-bold">{simulatedResult.delayProbability}%</strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 uppercase block">Estimated Delay</span>
-                  <strong className="text-rose-700 font-bold">+{simulatedResult.estimatedDelay} days</strong>
+                  <span className="text-[10px] text-slate-400 uppercase block">Estimated Delay</span>
+                  <strong className="text-rose-400 font-bold">+{simulatedResult.estimatedDelay} days</strong>
                 </div>
               </div>
             </div>
 
             {/* Simulated Top Drivers */}
             <div className="space-y-1.5">
-              <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider block">
+              <span className="text-[10px] font-bold text-slate-300 uppercase tracking-wider block">
                 Attributed Drivers:
               </span>
               {simulatedResult.drivers.map((d) => (
                 <div key={d.factor} className="space-y-0.5">
                   <div className="flex justify-between text-[10px]">
-                    <span className="text-slate-700 truncate max-w-[200px]">{d.factor}</span>
-                    <span className="text-slate-900 font-bold">{d.contribution}%</span>
+                    <span className="text-slate-300 truncate max-w-[200px]">{d.factor}</span>
+                    <span className="text-white font-bold">{d.contribution}%</span>
                   </div>
-                  <div className="w-full h-1 bg-slate-200 rounded-xs overflow-hidden">
+                  <div className="w-full h-1.5 bg-slate-900 rounded overflow-hidden">
                     <div
-                      className="h-full bg-slate-700 rounded-xs transition-all duration-300"
+                      className="h-full bg-blue-500 rounded transition-all duration-300"
                       style={{ width: `${d.contribution * 2}%` }}
                     />
                   </div>
@@ -409,18 +409,18 @@ export const ScenarioSimulator: React.FC<ScenarioSimulatorProps> = ({ parcel }) 
             </div>
 
             {/* Updated Recommended Intervention */}
-            <div className="p-2.5 bg-blue-50/60 rounded-xs border border-blue-200 space-y-1">
-              <span className="text-[10px] font-bold text-blue-900 uppercase flex items-center gap-1">
-                <ArrowRight className="w-3 h-3 text-blue-700" />
+            <div className="p-2.5 bg-blue-950/40 rounded border border-blue-900/60 space-y-1">
+              <span className="text-[10px] font-bold text-blue-300 uppercase flex items-center gap-1">
+                <ArrowRight className="w-3 h-3 text-blue-400" />
                 Updated Recommended Intervention:
               </span>
-              <p className="text-xs font-sans font-medium text-slate-800 leading-snug">
+              <p className="text-xs font-sans font-medium text-slate-200 leading-snug">
                 "{simulatedResult.intervention}"
               </p>
             </div>
           </div>
 
-          <p className="text-[10px] text-slate-400 font-mono text-center pt-1 border-t border-slate-200/80">
+          <p className="text-[10px] text-slate-500 font-mono text-center pt-1 border-t border-slate-800/80">
             Illustrative prediction • Demo parameter sandbox
           </p>
         </div>

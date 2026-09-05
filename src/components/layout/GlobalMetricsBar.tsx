@@ -42,7 +42,7 @@ export const GlobalMetricsBar: React.FC<GlobalMetricsBarProps> = ({
   return (
     <div
       id="global-metrics-mini-bar"
-      className="bg-slate-900 border-b border-slate-800 text-slate-300 px-4 sm:px-6 py-2 z-20 sticky top-0 shadow-xs select-none"
+      className="bg-[#0b0f17]/90 backdrop-blur-sm border-b border-slate-800/80 text-slate-300 px-4 sm:px-6 py-2 z-20 shadow-xs select-none flex-shrink-0"
     >
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs font-mono">
         {/* Left Core Metrics: Total Projects & Overall Avg Risk */}
